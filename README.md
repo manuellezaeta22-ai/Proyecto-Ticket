@@ -1,6 +1,6 @@
-# 🎫 Sistema de Tickets (API REST + Vanilla Frontend)
+# 🎫 Sistema de Tickets (PHP Nativo + Vanilla Frontend)
 
-Proyecto estudiantil desarrollado con una arquitectura limpia por capas, diseñado para ejecutarse en contenedores Docker utilizando PHP nativo (sin frameworks) y un frontend puro con JavaScript, HTML y CSS.
+Proyecto estudiantil desarrollado con una arquitectura limpia por capas en PHP orientado a objetos, diseñado para ejecutarse en contenedores Docker utilizando PHP nativo (sin frameworks ni Composer) y un frontend puro con JavaScript, HTML y CSS.
 
 ---
 
@@ -10,37 +10,35 @@ El proyecto está dividido en dos grandes bloques para separar claramente la int
 
 ```text
 sistema-tickets/
-├── frontend/                          ← HTML, CSS y JS puro
-│   ├── templates/                     ← Vistas HTML de la aplicación
-│   ├── css/                           ← Estilos visuales
+├── frontend/                        ← HTML, CSS y JS puro
+│   ├── templates/                   ← Vistas HTML de la aplicación
+│   ├── css/                         ← Estilos visuales
 │   ├── js/
-│   │   └── api.js                     ← Funciones centralizadas de conexión (fetch)
-│   └── assets/                        ← Recursos multimedia (imágenes, iconos)
+│   │   └── api.js                   ← Funciones centralizadas de conexión
+│   └── assets/                      ← Recursos multimedia (imágenes, iconos)
 │
 ├── backend/
 │   ├── public/
-│   │   └── index.php                  ← Front Controller y autargador nativo
+│   │   └── index.php                ← Front Controller y autargador nativo (spl_autoload_register)
 │   ├── src/
 │   │   ├── Routes/
-│   │   │   └── routes.php             ← Enrutador minimalista de la API
-│   │   ├── Controllers/               ← Reciben peticiones y devuelven respuestas HTTP
-│   │   ├── Services/                  ← Lógica de negocio de la aplicación
-│   │   ├── DTOs/                      ← Objetos de transferencia de datos
-│   │   ├── Models/                    │   (Mapeo y validación inicial)
-│   │   │   └── TicketModel.php        ← Interacción directa con la base de datos
+│   │   │   └── routes.php           ← Enrutador minimalista de la aplicación
+│   │   ├── Controllers/             ← Reciben peticiones y controlan el flujo
+│   │   ├── Services/                ← Lógica de negocio de la aplicación
+│   │   ├── DTOs/                    ← Objetos de transferencia de datos
+│   │   ├── Models/                  │   (Mapeo y validación inicial)
+│   │   │   └── TicketModel.php      ← Interacción directa con la base de datos
 │   │   └── Database/
-│   │       └── Connection.php         ← Conexión PDO única (Patrón Singleton)
+│   │       └── Connection.php       ← Conexión PDO única (Patrón Singleton)
 │
-├── dockerfile                         ← Configuración del contenedor PHP/Apache
-├── docker-compose.yml                 ← Orquestación de servicios (App + phpMyAdmin + MySQL)
-└── README.md                          ← Documentación oficial del proyecto
-
-
+├── dockerfile                       ← Configuración del contenedor PHP/Apache
+├── docker-compose.yml               ← Orquestación de servicios (App + phpMyAdmin + MySQL)
+└── README.md                        ← Documentación oficial del proyecto
 
 🛠️ Tecnologías y Herramientas
-Frontend: HTML5, CSS3, JavaScript (Vanilla ES6+ con Fetch API).
+Frontend: HTML5, CSS3, JavaScript (Vanilla ES6+).
 
-Backend: PHP 8+ (Programación Orientada a Objetos, sin frameworks, autargador nativo mediante spl_autoload_register).
+Backend: PHP 8+ (Programación Orientada a Objetos, sin frameworks, autocarga de clases nativa mediante spl_autoload_register).
 
 Base de Datos: MySQL (gestionada a través de phpMyAdmin).
 
@@ -54,28 +52,28 @@ Levantar los servicios de infraestructura mediante docker-compose.yml (Contenedo
 
 Verificar la conectividad con phpMyAdmin y crear la base de datos inicial para el sistema de tickets.
 
-Fase 2: Núcleo del Backend (Estructura por Capas sin Frameworks)
+Fase 2: Núcleo del Backend (Estructura por Capas sin Frameworks ni Composer)
 Conexión a Base de Datos: Configurar la clase Connection.php utilizando PDO mediante el patrón Singleton.
 
-Autocarga Nativa: Implementar el registro automático de clases en index.php utilizando spl_autoload_register.
+Autocarga Nativa: Implementar el registro automático de clases en index.php utilizando spl_autoload_register para prescindir por completo de Composer y carpetas vendor.
 
-Modelos y DTOs: Desarrollar los modelos de acceso a datos (TicketModel, UsuarioModel) y los DTOs para estructurar la información transferida de forma segura.
+Modelos y DTOs: Desarrollar los modelos de acceso a datos (TicketModel, UsuarioModel) y los DTOs para estructurar la información de forma segura.
 
-Servicios y Controladores: Escribir la lógica de negocio y las respuestas JSON en los controladores.
+Servicios y Controladores: Escribir la lógica de negocio y gestionar las peticiones en los controladores.
 
-Ruteo: Configurar routes.php para direccionar los verbos HTTP (GET, POST, PUT, DELETE) hacia sus respectivos controladores.
+Ruteo: Configurar routes.php para direccionar las solicitudes hacia sus respectivos controladores.
 
 Fase 3: Desarrollo del Frontend (Vanilla)
 Diseñar las plantillas HTML dentro de la carpeta templates/.
 
 Escribir las hojas de estilo CSS para darle interfaz visual al sistema.
 
-Crear el archivo api.js encargado de hacer las peticiones asíncronas (fetch) hacia los endpoints del backend PHP.
+Crear el archivo api.js encargado de la comunicación con el backend.
 
 Fase 4: Pruebas e Integración
-Conectar el frontend con el backend validando políticas de CORS e intercambio de datos en formato JSON.
+Conectar el frontend con el backend validando el flujo de datos.
 
-Realizar pruebas de flujo completo (crear, listar y actualizar tickets desde la interfaz gráfica).
+Realizar pruebas completas (crear, listar y administrar tickets desde la interfaz gráfica).
 
 ⚙️ Instrucciones de Ejecución
 Clonar o abrir el repositorio en Visual Studio Code.
@@ -84,12 +82,12 @@ Iniciar Docker Desktop en tu equipo (Windows 10).
 
 Levantar los contenedores ejecutando en la terminal raíz del proyecto:
 
-Bash
-docker-compose up -d
+comando: docker-compose up -d
+
 Acceder a los servicios:
 
-Aplicación Backend / API: Configurada en el puerto expuesto por tu Dockerfile/Compose (ej. http://localhost:8080).
+Aplicación Backend: Configurada en el puerto expuesto por tu Docker/Compose (ej. http://localhost:8080).
 
-phpMyAdmin: http://localhost:8081 (o el puerto configurado) para administrar las tablas de MySQL.
+phpMyAdmin: http://localhost:8081 para administrar las tablas de MySQL.
 
 Frontend: Abrir la carpeta frontend/ en VS Code y utilizar la extensión Live Server para levantar la interfaz visual de desarrollo.
