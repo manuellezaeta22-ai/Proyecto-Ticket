@@ -1,0 +1,66 @@
+CREATE TABLE producto (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100),
+    precio DECIMAL(10,2),
+    stock INT
+);
+
+
+INSERT INTO producto (nombre, precio, stock)
+VALUES
+    ('Mouse', 650.00, 20),
+    ('Monitor', 8500.00, 8),
+    ('Teclado mecánico', 3200.00, 5);
+
+SELECT * FROM producto;
+
+SELECT nombre, precio
+FROM producto;
+
+SELECT *
+FROM producto
+WHERE precio = 1200;
+
+Operador
+
+=
+<>
+>
+<
+>=
+<=
+
+
+SELECT *
+FROM producto
+WHERE precio > 1000 AND stock > 5;
+
+SELECT *
+FROM producto
+WHERE precio < 1000 OR stock < 10;
+
+SELECT *
+FROM producto
+WHERE nombre LIKE 'Teclado%';
+
+SELECT *
+FROM producto
+WHERE nombre LIKE '%mecánico';
+
+SELECT *
+FROM producto
+WHERE nombre LIKE '%Mouse%'
+   OR nombre LIKE '%Teclado%';
+
+SELECT *
+FROM producto
+WHERE precio > 5000
+   OR nombre LIKE '%Mouse%';
+
+SELECT *
+FROM producto
+WHERE nombre <> 'Mouse';
+
+SELECT *
+FROM producto
+WHERE nombre != 'Mouse';
