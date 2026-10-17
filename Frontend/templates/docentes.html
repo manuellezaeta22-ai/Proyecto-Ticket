@@ -1,11 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Panel Docente | Sistema de Tickets</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script src="../js/docentes.js" defer></script>
 </head>
 <body>
-    <h1>Docentes</h1>
+    <header>
+        <div>
+            <h1>Panel de Docentes</h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Reporte de fallas e incidentes institucionales</p>
+        </div>
+        <nav>
+            <button type="button" id="btn-cerrar-sesion" class="btn-secondary">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Registrar Nuevo Ticket</h2>
+            <br>
+            <form id="formulario-ticket">
+                <div class="form-group">
+                    <label for="titulo">Título del incidente</label>
+                    <input type="text" id="titulo" name="titulo" maxlength="150" required placeholder="Ej. Fallo de proyector en Aula 4">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_categoria">Categoría</label>
+                    <select id="id_categoria" name="id_categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="1">Soporte Técnico</option>
+                        <option value="2">Infraestructura</option>
+                        <option value="3">Mantenimiento</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción detallada</label>
+                    <textarea id="descripcion" name="descripcion" rows="4" required placeholder="Describe el problema o falla encontrada..."></textarea>
+                </div>
+
+                <p id="mensaje-error" role="alert" hidden></p>
+                <p id="mensaje-exito" role="status" hidden></p>
+
+                <button type="submit">Enviar Ticket</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Mis Tickets Reportados</h2>
+            <div id="contenedor-mis-tickets" style="margin-top: 1rem;">
+                <p style="color: var(--text-muted);">Cargando tus tickets...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Sistema institucional de gestión de incidentes</p>
+    </footer>
 </body>
 </html>

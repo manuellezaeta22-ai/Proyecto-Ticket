@@ -24,10 +24,8 @@ final class AuthService
             return null;
         }
 
-        if (!password_verify(
-            $password,
-            $usuario['password_hash']
-        )) {
+        // Comparación directa de texto plano
+        if ($password !== $usuario['password_hash']) {
             return null;
         }
 

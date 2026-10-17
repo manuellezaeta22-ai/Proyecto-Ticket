@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 final class Usuario
 {
     public function __construct(
@@ -11,106 +9,59 @@ final class Usuario
 
     public function buscarPorId(int $idUsuario): ?array
     {
-        $sql = '
-            SELECT
-                id_usuario,
-                cedula,
-                usuario,
-                rol,
-                activo
-            FROM usuarios
-            WHERE id_usuario = :id_usuario
-        ';
+        $sql = 'SELECT id_usuario, cedula, usuario, rol, activo 
+                FROM usuarios 
+                WHERE id_usuario = :id_usuario';
 
         $consulta = $this->conexion->prepare($sql);
+        $consulta->execute(['id_usuario' => $idUsuario]);
 
-        $consulta->execute([
-            'id_usuario' => $idUsuario
-        ]);
-
-        $usuario = $consulta->fetch();
-
-        return $usuario ?: null;
+        $resultado = $consulta->fetch();
+        return $resultado ?: null;
     }
 
     public function buscarPorNombreUsuario(string $nombreUsuario): ?array
     {
         /*
-         * En este método sí recuperamos password_hash porque será
-         * utilizado por AuthService para comprobar la contraseña.
+         * Método utilizado por AuthService para verificar credenciales
+         * incluyendo password_hash.
          */
-
-        $sql = '
-            SELECT
-                id_usuario,
-                cedula,
-                usuario,
-                password_hash,
-                rol,
-                activo
-            FROM usuarios
-            WHERE usuario = :usuario
-        ';
+        $sql = 'SELECT id_usuario, cedula, usuario, password_hash, rol, activo 
+                FROM usuarios 
+                WHERE usuario = :usuario';
 
         $consulta = $this->conexion->prepare($sql);
+        $consulta->execute(['usuario' => $nombreUsuario]);
 
-        $consulta->execute([
-            'usuario' => $nombreUsuario
-        ]);
-
-        $usuario = $consulta->fetch();
-
-        return $usuario ?: null;
+        $resultado = $consulta->fetch();
+        return $resultado ?: null;
     }
 
     public function listarDocentes(): array
     {
-        $sql = "
-            SELECT
-                id_usuario,
-                cedula,
-                usuario,
-                rol,
-                activo
-            FROM usuarios
-            WHERE rol = 'docente'
-            ORDER BY usuario ASC
-        ";
+        $sql = "SELECT id_usuario, cedula, usuario, rol, activo 
+                FROM usuarios 
+                WHERE rol = 'docente' 
+                ORDER BY usuario ASC";
 
-        $consulta = $this->conexion->query($sql);
-
-        return $consulta->fetchAll();
+        return $this->conexion->query($sql)->fetchAll();
     }
 
     public function crear(
         string $cedula,
         string $nombreUsuario,
         string $passwordHash,
-        string $rol = 'docente'
+        string $rol
     ): int {
-        $sql = '
-            INSERT INTO usuarios (
-                cedula,
-                usuario,
-                password_hash,
-                rol,
-                activo
-            ) VALUES (
-                :cedula,
-                :usuario,
-                :password_hash,
-                :rol,
-                TRUE
-            )
-        ';
+        $sql = 'INSERT INTO usuarios (cedula, usuario, password_hash, rol, activo) 
+                VALUES (:cedula, :usuario, :password_hash, :rol, 1)';
 
         $consulta = $this->conexion->prepare($sql);
-
         $consulta->execute([
-            'cedula' => $cedula,
-            'usuario' => $nombreUsuario,
+            'cedula'        => $cedula,
+            'usuario'       => $nombreUsuario,
             'password_hash' => $passwordHash,
-            'rol' => $rol
+            'rol'           => $rol,
         ]);
 
         return (int) $this->conexion->lastInsertId();
@@ -120,26 +71,13 @@ final class Usuario
         int $idUsuario,
         bool $activo
     ): bool {
-        $sql = '
-            UPDATE usuarios
-            SET activo = :activo
-            WHERE id_usuario = :id_usuario
-        ';
+        $sql = 'UPDATE usuarios 
+                SET activo = :activo 
+                WHERE id_usuario = :id_usuario';
 
         $consulta = $this->conexion->prepare($sql);
-
-        $consulta->bindValue(
-            ':activo',
-            $activo,
-            PDO::PARAM_BOOL
-        );
-
-        $consulta->bindValue(
-            ':id_usuario',
-            $idUsuario,
-            PDO::PARAM_INT
-        );
-
+        $consulta->bindValue(':activo', $activo, PDO::PARAM_BOOL);
+        $consulta->bindValue(':id_usuario', $idUsuario, PDO::PARAM_INT);
         $consulta->execute();
 
         return $consulta->rowCount() > 0;
@@ -147,35 +85,21 @@ final class Usuario
 
     public function existeCedula(string $cedula): bool
     {
-        $sql = '
-            SELECT COUNT(*)
-            FROM usuarios
-            WHERE cedula = :cedula
-        ';
+        $sql = 'SELECT COUNT(*) FROM usuarios WHERE cedula = :cedula';
 
         $consulta = $this->conexion->prepare($sql);
+        $consulta->execute(['cedula' => $cedula]);
 
-        $consulta->execute([
-            'cedula' => $cedula
-        ]);
-
-        return (int) $consulta->fetchColumn() > 0;
+        return ((int) $consulta->fetchColumn()) > 0;
     }
 
     public function existeNombreUsuario(string $nombreUsuario): bool
     {
-        $sql = '
-            SELECT COUNT(*)
-            FROM usuarios
-            WHERE usuario = :usuario
-        ';
+        $sql = 'SELECT COUNT(*) FROM usuarios WHERE usuario = :usuario';
 
         $consulta = $this->conexion->prepare($sql);
+        $consulta->execute(['usuario' => $nombreUsuario]);
 
-        $consulta->execute([
-            'usuario' => $nombreUsuario
-        ]);
-
-        return (int) $consulta->fetchColumn() > 0;
+        return ((int) $consulta->fetchColumn()) > 0;
     }
 }

@@ -1,11 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Panel Encargado | Sistema de Tickets</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script src="../js/encargado.js" defer></script>
 </head>
 <body>
-    <h1>Encargado</h1>
+    <header>
+        <div>
+            <h1>Panel de Encargado</h1>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Gestión global de incidentes y usuarios</p>
+        </div>
+        <nav>
+            <a href="crear-usuario.html" class="btn btn-secondary">Crear Usuario</a>
+            <button type="button" id="btn-cerrar-sesion" class="btn-secondary">Cerrar Sesión</button>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Incidentes Registrados</h2>
+            <br>
+            <div class="form-group" style="max-width: 250px;">
+                <label for="filtro-estado">Filtrar por estado:</label>
+                <select id="filtro-estado">
+                    <option value="todos">Todos</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="en proceso">En proceso</option>
+                    <option value="resuelto">Resuelto</option>
+                </select>
+            </div>
+
+            <div id="lista-tickets" style="margin-top: 1.5rem;">
+                <p style="color: var(--text-muted);">Cargando tickets registrados...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Sistema institucional de gestión de incidentes</p>
+    </footer>
 </body>
 </html>
